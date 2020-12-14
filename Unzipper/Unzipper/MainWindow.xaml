@@ -9,7 +9,7 @@
     <Grid>
         <TextBox x:Name="txtBrowse" HorizontalAlignment="Left" Height="23" Margin="34,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
         <Button x:Name="BtnBrowse" Content="Browse ..." HorizontalAlignment="Left" Margin="210,30,0,0" VerticalAlignment="Top" Width="79" Height="23" Click="BtnBrowse_Click"/>
-        <TextBox x:Name="txtReport" Text="{Binding Text}" HorizontalAlignment="Left" Height="101" Margin="68,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="646"/>
+        <TextBox x:Name="txtReport" Text="{Binding Text}" HorizontalAlignment="Left" Height="101" Margin="68,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="646" TextChanged="txtReport_TextChanged"/>
         <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="68,270,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
         <ProgressBar x:Name="Prg_progress" HorizontalAlignment="Left" Height="24" Margin="68,227,0,0" VerticalAlignment="Top" Width="646" ValueChanged="Prg_progress_ValueChanged"/>
         <Label x:Name="lblProgress" Content="Progress: " HorizontalAlignment="Left" Margin="68,196,0,0" VerticalAlignment="Top"/>

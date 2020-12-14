@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-
+using System.Windows.Controls.Primitives;
 using Ookii.Dialogs.Wpf;
 
 
@@ -183,6 +183,11 @@ namespace Unzipper
 
             long currentLevel = (long) ((totalElapsed / currentProgressValue) * (maxValue - currentProgressValue));
             Progress = $"Estimated: {currentLevel / 1000} Min"; // in min
+        }
+
+        private void txtReport_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            txtReport.ScrollToEnd();
         }
     }
 }
