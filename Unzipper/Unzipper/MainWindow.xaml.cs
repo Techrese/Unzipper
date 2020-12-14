@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,7 +18,7 @@ namespace Unzipper
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private string rootPath = string.Empty;
         private readonly Stopwatch stopwatch = new Stopwatch();
@@ -25,12 +26,45 @@ namespace Unzipper
         private int maxValue;
         private long totalElapsed = 0;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
 
         }
+
+
+        private string text;
+
+        public string Text
+        {
+            get => text;
+            set
+            {
+                text = value;
+                OnPropertyChanged("Text");
+            }
+        }
+
+        private string progress;
+
+        public string Progress
+        {
+            get => progress;
+            set
+            {
+                progress = value;
+                OnPropertyChanged("Progress");
+            }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
 
         private async void BtnBrowse_Click(object sender, RoutedEventArgs e) //the only time you may use async void
         {
@@ -49,7 +83,7 @@ namespace Unzipper
             }
             catch (Exception exception)
             {
-                txtReport.Text += $"{DateTime.Now} Exception thrown {exception} \n";
+                Text = $"{DateTime.Now} Exception thrown {exception} \n";
 
             }
         }
@@ -58,24 +92,25 @@ namespace Unzipper
         {
             try
             {
-                txtReport.Text += $"{DateTime.Now} loading files, this may take some time ... \n";
+                Text = $"{DateTime.Now} loading files, this may take some time ... \n";
                 var zipFiles = new List<string>();
                 await Task.Run(() =>
                 {
                     zipFiles = Directory.GetFiles(rootPath, "*.zip", SearchOption.AllDirectories).ToList();
                 });
 
-                txtReport.Text += $"{DateTime.Now} Found {zipFiles.Count} files \n";
+                Text = $"{DateTime.Now} Found {zipFiles.Count} files \n";
                 Prg_progress.Maximum = zipFiles.Count;
                 Prg_progress.Minimum = 0;
 
                 maxValue = zipFiles.Count;
 
+                Text = $"{DateTime.Now} starting extracting... \n";
                 Extract(zipFiles);
             }
             catch (Exception exception)
             {
-                txtReport.Text += $"{DateTime.Now} Exception thrown {exception} \n";
+                 Text = $"{DateTime.Now} Exception thrown {exception} \n";
             }
         }
 
@@ -107,14 +142,14 @@ namespace Unzipper
             }
             catch (Exception exception)
             {
-                txtReport.Text += $"{DateTime.Now} Exception thrown {exception} \n";
+                Text = $"{DateTime.Now} Exception thrown {exception} \n";
             }
         }
 
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            txtReport.Text = string.Empty;
+            Text = string.Empty;
         }
 
         private void Prg_progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -126,7 +161,7 @@ namespace Unzipper
             totalElapsed += (lastElapsedTime/1000); // in seconds
 
             long currentLevel = (long) ((totalElapsed / currentProgressValue) * (maxValue - currentProgressValue));
-            lblEstimated.Content = $"Estimated: {currentLevel / 1000} Min"; // in min
+            Progress = $"Estimated: {currentLevel / 1000} Min"; // in min
         }
     }
 }
