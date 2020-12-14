@@ -106,7 +106,7 @@ namespace Unzipper
                 maxValue = zipFiles.Count;
 
                 Text = $"{DateTime.Now} starting extracting... \n";
-                Extract(zipFiles);
+                await Extract(zipFiles);
             }
             catch (Exception exception)
             {
@@ -114,36 +114,39 @@ namespace Unzipper
             }
         }
 
-        private void Extract(List<string> zipFiles)
+        private async Task Extract(List<string> zipFiles)
         {
-            try
+            await Task.Run(() =>
             {
-                foreach (var file in zipFiles)
+                try
                 {
-                    stopwatch.Start();
-                    //extract same place create folder with same name
-                    string destinationPath = file.Remove(file.Length - 4, 4); // the same path extract zip in a folder with same name
-                    if (!Directory.Exists(destinationPath))
+                    foreach (var file in zipFiles)
                     {
-                        ZipFile.ExtractToDirectory(file, destinationPath);
-                        elapsed = stopwatch.ElapsedMilliseconds;
-                        //update progressbar
-                        Prg_progress.Value++;
-                        stopwatch.Reset();
-                    }
-                    else
-                    {
-                        txtReport.Text += $"{DateTime.Now} Destination already exists for file {file} \n";
-                        Prg_progress.Value++;
-                    }
-                    // only extract if the directory does not exists. if the directory exists it will throw an io exception
+                        stopwatch.Start();
+                        //extract same place create folder with same name
+                        string destinationPath = file.Remove(file.Length - 4, 4); // the same path extract zip in a folder with same name
+                        if (!Directory.Exists(destinationPath))
+                        {
+                            ZipFile.ExtractToDirectory(file, destinationPath);
+                            elapsed = stopwatch.ElapsedMilliseconds;
+                            //update progressbar
+                            Prg_progress.Value++;
+                            stopwatch.Reset();
+                        }
+                        else
+                        {
+                            txtReport.Text += $"{DateTime.Now} Destination already exists for file {file} \n";
+                            Prg_progress.Value++;
+                        }
+                        // only extract if the directory does not exists. if the directory exists it will throw an io exception
 
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                Text = $"{DateTime.Now} Exception thrown {exception} \n";
-            }
+                catch (Exception exception)
+                {
+                    Text = $"{DateTime.Now} Exception thrown {exception} \n";
+                }
+            });
         }
 
 
