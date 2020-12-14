@@ -60,6 +60,18 @@ namespace Unzipper
             }
         }
 
+        private string currentProgress;
+
+        public string CurrentProgress
+        {
+            get => currentProgress;
+            set
+            {
+                currentProgress = value;
+                OnPropertyChanged("CurrentProgress");
+            }
+        }
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -175,6 +187,12 @@ namespace Unzipper
 
         private void Prg_progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            //update ui
+            Dispatcher.Invoke(() =>
+            {
+                CurrentProgress = $"Progress: {Prg_progress.Value}/{maxValue}";
+            });
+
             //update estimated time
             double currentProgressValue = Prg_progress.Value;
             long lastElapsedTime = elapsed;
