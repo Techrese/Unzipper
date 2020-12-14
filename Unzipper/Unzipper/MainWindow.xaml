@@ -11,6 +11,9 @@
         <Button x:Name="BtnBrowse" Content="Browse ..." HorizontalAlignment="Left" Margin="210,30,0,0" VerticalAlignment="Top" Width="79" Height="23" Click="BtnBrowse_Click"/>
         <TextBox x:Name="txtReport" HorizontalAlignment="Left" Height="101" Margin="68,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="646"/>
         <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="68,270,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
+        <ProgressBar HorizontalAlignment="Left" Height="24" Margin="68,227,0,0" VerticalAlignment="Top" Width="646"/>
+        <Label x:Name="txtProgress" Content="Progress: " HorizontalAlignment="Left" Margin="68,196,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="txtEstimated" Content="Estimated: " HorizontalAlignment="Left" Margin="585,196,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
