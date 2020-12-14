@@ -28,7 +28,8 @@ namespace Unzipper
         public MainWindow()
         {
             InitializeComponent();
-            
+            DataContext = this;
+
         }
 
         private async void BtnBrowse_Click(object sender, RoutedEventArgs e) //the only time you may use async void
@@ -86,11 +87,22 @@ namespace Unzipper
                 {
                     stopwatch.Start();
                     //extract same place create folder with same name
-                    ZipFile.ExtractToDirectory(file, file.Remove(file.Length-4,4));
-                    elapsed = stopwatch.ElapsedMilliseconds;
-                    //update progressbar
-                    Prg_progress.Value++;
-                    stopwatch.Reset();
+                    string destinationPath = file.Remove(file.Length - 4, 4); // the same path extract zip in a folder with same name
+                    if (!Directory.Exists(destinationPath))
+                    {
+                        ZipFile.ExtractToDirectory(file, destinationPath);
+                        elapsed = stopwatch.ElapsedMilliseconds;
+                        //update progressbar
+                        Prg_progress.Value++;
+                        stopwatch.Reset();
+                    }
+                    else
+                    {
+                        txtReport.Text += $"{DateTime.Now} Destination already exists for file {file} \n";
+                        Prg_progress.Value++;
+                    }
+                    // only extract if the directory does not exists. if the directory exists it will throw an io exception
+
                 }
             }
             catch (Exception exception)
