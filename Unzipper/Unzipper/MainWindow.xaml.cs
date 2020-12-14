@@ -97,7 +97,7 @@ namespace Unzipper
             {
                 Dispatcher.Invoke(() =>
                 {
-                    Text += $"{DateTime.Now} Exception thrown {exception} \n";
+                    Text += $"{DateTime.Now} Exception thrown {exception.Message} \n";
                 });
             }
         }
@@ -132,7 +132,7 @@ namespace Unzipper
             }
             catch (Exception exception)
             {
-                 Text += $"{DateTime.Now} Exception thrown {exception} \n";
+                 Text += $"{DateTime.Now} Exception thrown {exception.Message} \n";
             }
         }
 
@@ -140,42 +140,40 @@ namespace Unzipper
         {
             await Task.Run(() =>
             {
-                try
+                foreach (var file in zipFiles)
                 {
-                    foreach (var file in zipFiles)
+                    try
                     {
                         stopwatch.Start();
                         //extract same place create folder with same name
-                        string destinationPath = file.Remove(file.Length - 4, 4); // the same path extract zip in a folder with same name
+                        string destinationPath =
+                            file.Remove(file.Length - 4, 4); // the same path extract zip in a folder with same name
                         if (!Directory.Exists(destinationPath))
                         {
                             ZipFile.ExtractToDirectory(file, destinationPath);
                             elapsed = stopwatch.ElapsedMilliseconds;
                             //update progressbar
-                            Dispatcher.Invoke(() =>
-                            {
-                                Prg_progress.Value++;
-                            });
+                            Dispatcher.Invoke(() => { Prg_progress.Value++; });
                             Text += $"{DateTime.Now} {file} Processed! \n";
                             stopwatch.Reset();
                         }
                         else
                         {
                             Text += $"{DateTime.Now} Destination already exists for file {file} \n";
-                            Dispatcher.Invoke(() =>
-                            {
-                                Prg_progress.Value++;
-                            });
-                            
-                        }
-                        // only extract if the directory does not exists. if the directory exists it will throw an io exception
+                            Dispatcher.Invoke(() => { Prg_progress.Value++; });
 
+                        }
+
+                        // only extract if the directory does not exists. if the directory exists it will throw an io exception
                     }
+                    catch (Exception ex)
+                    {
+                        Text += $"{DateTime.Now} Exception thrown {ex.Message} on file {file} \n";
+                    }
+
                 }
-                catch (Exception exception)
-                {
-                    Text += $"{DateTime.Now} Exception thrown {exception} \n";
-                }
+                
+                
             });
         }
 
