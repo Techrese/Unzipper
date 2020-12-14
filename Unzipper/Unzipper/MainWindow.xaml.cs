@@ -83,8 +83,10 @@ namespace Unzipper
             }
             catch (Exception exception)
             {
-                Text = $"{DateTime.Now} Exception thrown {exception} \n";
-
+                Dispatcher.Invoke(() =>
+                {
+                    Text += $"{DateTime.Now} Exception thrown {exception} \n";
+                });
             }
         }
 
@@ -92,25 +94,33 @@ namespace Unzipper
         {
             try
             {
-                Text = $"{DateTime.Now} loading files, this may take some time ... \n";
+                Dispatcher.Invoke(() =>
+                {
+                    Text += $"{DateTime.Now} loading files, this may take some time ... \n";
+                });
+                
                 var zipFiles = new List<string>();
                 await Task.Run(() =>
                 {
                     zipFiles = Directory.GetFiles(rootPath, "*.zip", SearchOption.AllDirectories).ToList();
                 });
 
-                Text = $"{DateTime.Now} Found {zipFiles.Count} files \n";
+                Dispatcher.Invoke(() =>
+                {
+                    Text += $"{DateTime.Now} Found {zipFiles.Count} files \n";
+                });
+
                 Prg_progress.Maximum = zipFiles.Count;
                 Prg_progress.Minimum = 0;
 
                 maxValue = zipFiles.Count;
 
-                Text = $"{DateTime.Now} starting extracting... \n";
+                Text += $"{DateTime.Now} starting extracting... \n";
                 await Extract(zipFiles);
             }
             catch (Exception exception)
             {
-                 Text = $"{DateTime.Now} Exception thrown {exception} \n";
+                 Text += $"{DateTime.Now} Exception thrown {exception} \n";
             }
         }
 
@@ -130,13 +140,21 @@ namespace Unzipper
                             ZipFile.ExtractToDirectory(file, destinationPath);
                             elapsed = stopwatch.ElapsedMilliseconds;
                             //update progressbar
-                            Prg_progress.Value++;
+                            Dispatcher.Invoke(() =>
+                            {
+                                Prg_progress.Value++;
+                            });
+                            Text += $"{DateTime.Now} {file} Processed! \n";
                             stopwatch.Reset();
                         }
                         else
                         {
-                            txtReport.Text += $"{DateTime.Now} Destination already exists for file {file} \n";
-                            Prg_progress.Value++;
+                            Text += $"{DateTime.Now} Destination already exists for file {file} \n";
+                            Dispatcher.Invoke(() =>
+                            {
+                                Prg_progress.Value++;
+                            });
+                            
                         }
                         // only extract if the directory does not exists. if the directory exists it will throw an io exception
 
@@ -144,7 +162,7 @@ namespace Unzipper
                 }
                 catch (Exception exception)
                 {
-                    Text = $"{DateTime.Now} Exception thrown {exception} \n";
+                    Text += $"{DateTime.Now} Exception thrown {exception} \n";
                 }
             });
         }
