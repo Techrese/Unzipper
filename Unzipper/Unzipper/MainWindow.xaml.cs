@@ -182,7 +182,7 @@ namespace Unzipper
             totalElapsed += (lastElapsedTime/1000); // in seconds
 
             long currentLevel = (long) ((totalElapsed / currentProgressValue) * (maxValue - currentProgressValue));
-            Progress = $"Estimated: {currentLevel / 1000} Min"; // in min
+            Progress = $"Estimated: {currentLevel / 60} Min"; // in min
         }
 
         private void txtReport_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
