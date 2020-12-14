@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -19,10 +20,15 @@ namespace Unzipper
     public partial class MainWindow : Window
     {
         private string rootPath = string.Empty;
+        private readonly Stopwatch stopwatch = new Stopwatch();
+        private long elapsed;
+        private int maxValue;
+        private long totalElapsed = 0;
 
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private async void BtnBrowse_Click(object sender, RoutedEventArgs e) //the only time you may use async void
@@ -57,7 +63,13 @@ namespace Unzipper
                 {
                     zipFiles = Directory.GetFiles(rootPath, "*.zip", SearchOption.AllDirectories).ToList();
                 });
+
                 txtReport.Text += $"{DateTime.Now} Found {zipFiles.Count} files \n";
+                Prg_progress.Maximum = zipFiles.Count;
+                Prg_progress.Minimum = 0;
+
+                maxValue = zipFiles.Count;
+
                 Extract(zipFiles);
             }
             catch (Exception exception)
@@ -72,8 +84,13 @@ namespace Unzipper
             {
                 foreach (var file in zipFiles)
                 {
+                    stopwatch.Start();
                     //extract same place create folder with same name
                     ZipFile.ExtractToDirectory(file, file.Remove(file.Length-4,4));
+                    elapsed = stopwatch.ElapsedMilliseconds;
+                    //update progressbar
+                    Prg_progress.Value++;
+                    stopwatch.Reset();
                 }
             }
             catch (Exception exception)
@@ -86,6 +103,18 @@ namespace Unzipper
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
             txtReport.Text = string.Empty;
+        }
+
+        private void Prg_progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //update estimated time
+            double currentProgressValue = Prg_progress.Value;
+            long lastElapsedTime = elapsed;
+            
+            totalElapsed += (lastElapsedTime/1000); // in seconds
+
+            long currentLevel = (long) ((totalElapsed / currentProgressValue) * (maxValue - currentProgressValue));
+            lblEstimated.Content = $"Estimated: {currentLevel / 1000} Min"; // in min
         }
     }
 }
