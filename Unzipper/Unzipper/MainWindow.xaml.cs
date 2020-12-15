@@ -169,6 +169,7 @@ namespace Unzipper
                     catch (Exception ex)
                     {
                         Text += $"{DateTime.Now} Exception thrown {ex.Message} on file {file} \n";
+                        Dispatcher.Invoke(() => { Prg_progress.Value++; });
                     }
 
                 }
