@@ -173,8 +173,8 @@ namespace Unzipper
                     }
 
                 }
-                
-                
+                Text += $"{DateTime.Now} Finished extraction!\n";
+
             });
         }
 
