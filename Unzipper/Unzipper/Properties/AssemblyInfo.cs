@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Unzipper")]
-[assembly: AssemblyDescription("Unzipping multiple zip files at once")]
+[assembly: AssemblyDescription("Unzipping multiple compressed archives at once")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("TechnologyResearcher")]
 [assembly: AssemblyProduct("Unzipper")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
