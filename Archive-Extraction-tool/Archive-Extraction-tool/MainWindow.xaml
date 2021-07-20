@@ -1,0 +1,20 @@
+﻿<Window x:Class="Archive_Extraction_tool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Archive_Extraction_tool"
+        mc:Ignorable="d"
+        Title="Archive extraction Tool" Height="450" Width="800">
+    <Grid x:Name="prgProgress" Background="#FF5B5B5B">
+        <TextBox x:Name="txtBrowse" HorizontalAlignment="Left" Margin="162,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="309" Height="26"/>
+        <Button x:Name="btnBrowse" Content="Browse..." HorizontalAlignment="Left" Margin="486,155,0,0" VerticalAlignment="Top" Height="26" Width="61"/>
+        <Label x:Name="lblBrowse" Content="Please select the parent folder of your archives." HorizontalAlignment="Left" Margin="162,113,0,0" VerticalAlignment="Top" Foreground="#FFF7F3F3"/>
+        <ProgressBar HorizontalAlignment="Left" Height="20" Margin="162,238,0,0" VerticalAlignment="Top" Width="385"/>
+        <Label x:Name="lblEstimated" Content="" HorizontalAlignment="Left" Margin="433,207,0,0" VerticalAlignment="Top" Foreground="#FFF9F9F9" RenderTransformOrigin="-0.645,0.707"/>
+        <Label x:Name="lblProgress" Content="" HorizontalAlignment="Left" Margin="162,0,0,0" VerticalAlignment="Center" Foreground="#FFFFFEFE"/>
+        <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Left" Margin="564,155,0,0" VerticalAlignment="Top" Height="26" Width="46"/>
+        <Label x:Name="lblTotalElapsed" Content="" HorizontalAlignment="Left" Margin="479,276,0,0" VerticalAlignment="Top" Foreground="White"/>
+
+    </Grid>
+</Window>
