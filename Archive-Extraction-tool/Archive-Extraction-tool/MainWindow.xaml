@@ -6,15 +6,20 @@
         xmlns:local="clr-namespace:Archive_Extraction_tool"
         mc:Ignorable="d"
         Title="Archive extraction Tool" Height="450" Width="800">
-    <Grid x:Name="prgProgress" Background="#FF5B5B5B">
+    <Grid Background="#FF5B5B5B">
         <TextBox x:Name="txtBrowse" HorizontalAlignment="Left" Margin="162,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="309" Height="26"/>
         <Button x:Name="btnBrowse" Content="Browse..." HorizontalAlignment="Left" Margin="486,155,0,0" VerticalAlignment="Top" Height="26" Width="61" Click="btnBrowse_Click"/>
         <Label x:Name="lblBrowse" Content="Please select the parent folder of your archives." HorizontalAlignment="Left" Margin="162,113,0,0" VerticalAlignment="Top" Foreground="#FFF7F3F3"/>
-        <ProgressBar HorizontalAlignment="Left" Height="20" Margin="162,238,0,0" VerticalAlignment="Top" Width="385"/>
+        <ProgressBar x:Name="prgProgress" HorizontalAlignment="Left" Height="20" Margin="162,238,0,0" VerticalAlignment="Top" Width="385"/>
         <Label x:Name="lblEstimated" Content="{Binding Progress}" HorizontalAlignment="Left" Margin="433,207,0,0" VerticalAlignment="Top" Foreground="#FFF9F9F9" RenderTransformOrigin="-0.645,0.707"/>
         <Label x:Name="lblProgress" Content="{Binding currentProgress}" HorizontalAlignment="Left" Margin="162,0,0,0" VerticalAlignment="Center" Foreground="#FFFFFEFE"/>
         <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Left" Margin="564,155,0,0" VerticalAlignment="Top" Height="26" Width="46" Click="btnClear_Click"/>
         <Label x:Name="lblTotalElapsed" Content="" HorizontalAlignment="Left" Margin="479,276,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <ComboBox x:Name="cmbFilter" HorizontalAlignment="Left" Margin="37,157,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Zip"/>
+            <ComboBoxItem Content="Rar"/>
+        </ComboBox>
+        <CheckBox x:Name="chkDeleteArchive" Content="Delete archive?" HorizontalAlignment="Left" Margin="167,186,0,0" VerticalAlignment="Top" Height="21" Width="110" Foreground="White"/>
 
     </Grid>
 </Window>
