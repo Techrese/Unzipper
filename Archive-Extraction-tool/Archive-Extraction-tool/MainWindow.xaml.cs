@@ -21,7 +21,7 @@ namespace Archive_Extraction_tool
     /// Interaction logic for MainWindow.xaml
     /// </summary>  
     
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
 
         private string rootPath = string.Empty;
@@ -36,12 +36,18 @@ namespace Archive_Extraction_tool
                 
         public MainWindow()
         {
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.File($@"Logs/Archive-Extraction-Tool.log", (Serilog.Events.LogEventLevel)RollingInterval.Day).CreateLogger();
+            Log.Logger = new LoggerConfiguration().ReadFrom.AppSettings().CreateLogger();
             InitializeComponent();            
             DataContext = this;
-            timer.Elapsed += Timer_Tick;
-            timer.Start();
+            timer.Elapsed += Timer_Tick;            
             Log.Information("Application has started!");
+
+            Dispatcher.Invoke(() =>
+            {
+                CurrentProgress = $"Progress:  0/0";
+                Progress = "Unknown";
+                EstimatedTime = "00h:00m:00s";
+            });
         }
 
         private void Timer_Tick(object source, ElapsedEventArgs e)
@@ -49,21 +55,12 @@ namespace Archive_Extraction_tool
             timelapse++;
             TimeSpan t = TimeSpan.FromSeconds(timelapse);
 
-            estimatedTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", t.Hours, t.Minutes, t.Seconds);
-        }
-
-        private string total;
-
-        public string Total
-        {
-            get => total;
-            set 
+            Dispatcher.Invoke(() =>
             {
-                total = value;
-                OnPropertyChanged("Total");
-            }
+                EstimatedTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", t.Hours, t.Minutes, t.Seconds);
+            });
         }
-
+                
         private string text;
 
         public string Text
@@ -127,6 +124,7 @@ namespace Archive_Extraction_tool
             {
                 rootPath = dialog.SelectedPath;
                 txtBrowse.Text = rootPath;
+                timer.Start();
                 await LoadFiles();
             }
         }
@@ -270,15 +268,18 @@ namespace Archive_Extraction_tool
             });
 
             double currentProgressValue = prgProgress.Value;
-            long lastElapsedTime = elapsed;
+            double lastElapsedTime = elapsed;
             Log.Debug($"current iteration took {elapsed}ms");
-
-            long totalElapsed = lastElapsedTime / 1000;
-
+                        
             //all iterations - current iteration = iteration to go
             double iterations = prgProgress.Maximum - prgProgress.Value;
-            estimated = totalElapsed + (iterations * totalElapsed);
-            progress = $"Estimated: {estimated/1000} Min";
+            estimated = iterations * lastElapsedTime;
+
+            Dispatcher.Invoke( () => 
+            {
+                Progress = $"Estimated: {(int)(estimated / 1000)/60} Min";
+            });
+            
 
         }
 
