@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Ookii.Dialogs.Wpf;
+using Serilog;
+using SharpCompress.Common;
+using SharpCompress.Readers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,37 +13,32 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 
-using Ookii.Dialogs.Wpf;
-using SharpCompress.Readers;
-using SharpCompress.Common;
-using Serilog;
-using Serilog.Sinks.File;
-
 namespace Archive_Extraction_tool
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>  
-    
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 
         private string rootPath = string.Empty;
         private int maxCount = 0;
-        private readonly Stopwatch stopwatch = new Stopwatch();       
+        private readonly Stopwatch stopwatch = new Stopwatch();
         private long elapsed;
         private double estimated;
         private int timelapse = 0;
         private Timer timer = new Timer(1000);
+        private List<string> fileList;
 
         public event PropertyChangedEventHandler PropertyChanged;
-                
+
         public MainWindow()
         {
             Log.Logger = new LoggerConfiguration().ReadFrom.AppSettings().CreateLogger();
-            InitializeComponent();            
+            InitializeComponent();
             DataContext = this;
-            timer.Elapsed += Timer_Tick;            
+            timer.Elapsed += Timer_Tick;
             Log.Information("Application has started!");
 
             Dispatcher.Invoke(() =>
@@ -60,7 +59,7 @@ namespace Archive_Extraction_tool
                 EstimatedTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", t.Hours, t.Minutes, t.Seconds);
             });
         }
-                
+
         private string text;
 
         public string Text
@@ -99,7 +98,7 @@ namespace Archive_Extraction_tool
 
         private string estimatedTime;
 
-        public string EstimatedTime 
+        public string EstimatedTime
         {
             get => estimatedTime;
             set
@@ -138,13 +137,12 @@ namespace Archive_Extraction_tool
         private async Task LoadFiles()
         {
             Log.Information("Loading files!");
-            var fileList = new List<string>();
 
             try
-            {                
+            {
                 await Task.Run(() =>
                 {
-                    
+
                     fileList = Directory.GetFiles(rootPath, "*.*", SearchOption.AllDirectories).Where(file => file.EndsWith(".zip") || file.EndsWith(".rar") || file.EndsWith(".7zip") || file.EndsWith(".xz") || file.EndsWith(".tar") || file.EndsWith(".bzip2")).ToList();
                 });
 
@@ -152,8 +150,6 @@ namespace Archive_Extraction_tool
                 prgProgress.Value = prgProgress.Minimum;
                 prgProgress.Maximum = fileList.Count;
                 maxCount = fileList.Count;
-
-                await Extract(fileList);
             }
             catch (ArgumentNullException ex)
             {
@@ -193,18 +189,18 @@ namespace Archive_Extraction_tool
         private async Task Extract(List<string> fileList)
         {
             Log.Information("Extracting files.");
-            
-            await Task.Run(() => 
+
+            await Task.Run(() =>
             {
                 foreach (var file in fileList)
-                {                                       
+                {
                     Log.Debug($"Current file extracting: {file}");
                     var extension = Path.GetExtension(file);
                     var extractionPath = file.Remove(file.Length - extension.Length, extension.Length);
                     try
                     {
                         stopwatch.Start();
-                        
+
                         using (Stream stream = File.OpenRead(file))
                         {
                             using (var reader = ReaderFactory.Open(stream))
@@ -239,7 +235,7 @@ namespace Archive_Extraction_tool
             {
                 await Delete(fileList);
             }
-            else 
+            else
             {
                 timer.Stop();
             }
@@ -248,7 +244,7 @@ namespace Archive_Extraction_tool
         private async Task Delete(List<string> fileList)
         {
             Log.Information("Deleting files!");
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 foreach (var file in fileList)
                 {
@@ -270,16 +266,16 @@ namespace Archive_Extraction_tool
             double currentProgressValue = prgProgress.Value;
             double lastElapsedTime = elapsed;
             Log.Debug($"current iteration took {elapsed}ms");
-                        
+
             //all iterations - current iteration = iteration to go
             double iterations = prgProgress.Maximum - prgProgress.Value;
             estimated = iterations * lastElapsedTime;
 
-            Dispatcher.Invoke( () => 
-            {
-                Progress = $"Estimated: {(int)(estimated / 1000)/60} Min";
-            });
-            
+            Dispatcher.Invoke(() =>
+           {
+               Progress = $"Estimated: {(int)(estimated / 1000) / 60} Min";
+           });
+
 
         }
 
@@ -289,6 +285,11 @@ namespace Archive_Extraction_tool
             timer.Elapsed -= Timer_Tick;
             timer.Dispose();
             Log.CloseAndFlush();
+        }
+
+        private async void btnExtract_Click(object sender, RoutedEventArgs e)
+        {
+            await Extract(fileList);
         }
     }
 }

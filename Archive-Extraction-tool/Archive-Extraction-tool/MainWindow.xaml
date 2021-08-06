@@ -16,6 +16,7 @@
         <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Left" Margin="564,155,0,0" VerticalAlignment="Top" Height="26" Width="46" Click="btnClear_Click"/>
         <Label x:Name="lblTotalElapsed" Content="{Binding EstimatedTime}" HorizontalAlignment="Left" Margin="461,286,0,0" VerticalAlignment="Top" Foreground="White"/>
         <CheckBox x:Name="chkDeleteArchive" Content="Delete archive?" HorizontalAlignment="Left" Margin="167,186,0,0" VerticalAlignment="Top" Height="21" Width="110" Foreground="White"/>
+        <Button x:Name="btnExtract" Content="Extract" HorizontalAlignment="Left" Margin="414,183,0,0" VerticalAlignment="Top" Height="24" Width="57" Click="btnExtract_Click"/>
 
     </Grid>
 </Window>
