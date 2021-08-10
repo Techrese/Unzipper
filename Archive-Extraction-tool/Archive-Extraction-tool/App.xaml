@@ -1,7 +1,7 @@
-﻿<Application x:Class="Unzipper.App"
+﻿<Application x:Class="Archive_Extraction_tool.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Unzipper"
+             xmlns:local="clr-namespace:Archive_Extraction_tool"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

@@ -1,0 +1,22 @@
+﻿<Window x:Class="Archive_Extraction_tool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Archive_Extraction_tool"
+        mc:Ignorable="d"
+        Title="Archive extraction Tool" Height="450" Width="800" Closing="Window_Closing">
+    <Grid Background="#FF5B5B5B">
+        <TextBox x:Name="txtBrowse" HorizontalAlignment="Left" Margin="162,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="309" Height="26"/>
+        <Button x:Name="btnBrowse" Content="Browse..." HorizontalAlignment="Left" Margin="486,155,0,0" VerticalAlignment="Top" Height="26" Width="61" Click="btnBrowse_Click"/>
+        <Label x:Name="lblBrowse" Content="Please select the parent folder of your archives." HorizontalAlignment="Left" Margin="162,113,0,0" VerticalAlignment="Top" Foreground="#FFF7F3F3"/>
+        <ProgressBar x:Name="prgProgress" HorizontalAlignment="Left" Height="20" Margin="162,261,0,0" VerticalAlignment="Top" Width="385" ValueChanged="prgProgress_ValueChanged"/>
+        <Label x:Name="lblEstimated" Content="{Binding Progress}" HorizontalAlignment="Left" Margin="437,236,0,0" VerticalAlignment="Top" Foreground="#FFF9F9F9" RenderTransformOrigin="-0.645,0.707"/>
+        <Label x:Name="lblProgress" Content="{Binding CurrentProgress}" HorizontalAlignment="Left" Margin="167,236,0,0" VerticalAlignment="Top" Foreground="#FFFFFEFE"/>
+        <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Left" Margin="564,155,0,0" VerticalAlignment="Top" Height="26" Width="46" Click="btnClear_Click"/>
+        <Label x:Name="lblTotalElapsed" Content="{Binding EstimatedTime}" HorizontalAlignment="Left" Margin="461,286,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <CheckBox x:Name="chkDeleteArchive" Content="Delete archive?" HorizontalAlignment="Left" Margin="167,186,0,0" VerticalAlignment="Top" Height="21" Width="110" Foreground="White"/>
+        <Button x:Name="btnExtract" Content="Extract" HorizontalAlignment="Left" Margin="414,183,0,0" VerticalAlignment="Top" Height="24" Width="57" Click="btnExtract_Click"/>
+
+    </Grid>
+</Window>
