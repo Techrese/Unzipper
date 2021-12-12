@@ -1,3 +1,8 @@
+V2.0.1:
+
+Updated sharpcompress to V0.30.1
+Updated Ookii.Dialogs.Wpf to V5.0.0
+
 V2.0: 
 .net5.0
 Ookii.Dialogs.Wpf				V3.1.0
