@@ -1,3 +1,7 @@
+V2.0.2:
+
+Added Serilog.Sinks.File V5.0.0
+
 V2.0.1:
 
 Updated sharpcompress to V0.30.1
